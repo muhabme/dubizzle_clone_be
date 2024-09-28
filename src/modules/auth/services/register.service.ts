@@ -10,9 +10,7 @@ export class RegisterService {
   async registerUser(body: RegisterRequestDto) {
     await this.checkEmailAvailability(body);
 
-    const user = this.usersService.create(body);
-
-    return await this.usersService.save(user);
+    return this.usersService.create(body);
   }
   async checkEmailAvailability({ email }: RegisterRequestDto) {
     const user: User = await this.usersService.findByCondition({
