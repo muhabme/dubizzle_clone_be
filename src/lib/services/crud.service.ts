@@ -4,33 +4,48 @@ import {
   FindManyOptions,
   FindOneOptions,
   FindOptionsWhere,
+  SaveOptions,
 } from 'typeorm';
+import { FindOptions } from '../utils/find-options';
 
 export abstract class CrudService<T extends BaseEntity> {
   protected constructor(protected entity: typeof BaseEntity) {}
 
-  public create(data: DeepPartial<T>): T {
-    return this.getRepository().create(
-      data as DeepPartial<BaseEntity>,
+  async create(
+    attributes: DeepPartial<T>,
+    saveOptions?: SaveOptions,
+  ): Promise<T>;
+
+  async create(
+    items: Array<DeepPartial<T>>,
+    saveOptions?: SaveOptions,
+  ): Promise<T[]>;
+
+  async create(
+    attributes: DeepPartial<T> | Array<DeepPartial<T>>,
+    saveOptions?: SaveOptions,
+  ): Promise<T | T[]> {
+    if (Array.isArray(attributes)) {
+      const e = this.getRepository().create(
+        attributes as Array<DeepPartial<BaseEntity>>,
+      ) as unknown as T[];
+
+      for await (const item of e) {
+        await item.save();
+      }
+
+      return e;
+    }
+
+    const e = this.getRepository().create(
+      attributes as DeepPartial<BaseEntity>,
     ) as unknown as T;
+
+    return e.save(saveOptions);
   }
 
-  public createMany(items: Array<DeepPartial<T>>): T[] {
-    return this.getRepository().create(
-      items as DeepPartial<BaseEntity>[],
-    ) as unknown as T[];
-  }
-
-  public async save(data: DeepPartial<T>): Promise<T> {
-    return this.getRepository().save(
-      data as DeepPartial<BaseEntity>,
-    ) as unknown as Promise<T>;
-  }
-
-  public async saveMany(items: Array<DeepPartial<T>>): Promise<T[]> {
-    return (await this.getRepository().save(
-      items as DeepPartial<BaseEntity>[],
-    )) as unknown as Promise<T[]>;
+  async findAndCount(options?: FindManyOptions<T>): Promise<[T[], number]> {
+    return this.getEntity().buildQuery(options).getManyAndCount();
   }
 
   public async findOneById(id: any): Promise<T> {
@@ -77,6 +92,6 @@ export abstract class CrudService<T extends BaseEntity> {
   protected getEntity() {
     if (!this.entity) throw new Error('No entity found');
 
-    return this.entity as typeof BaseEntity & T;
+    return this.entity as typeof BaseEntity & T & typeof FindOptions;
   }
 }

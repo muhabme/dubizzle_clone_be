@@ -36,12 +36,10 @@ export class AccessTokenService extends CrudService<AccessToken> {
     user: User;
     expiresIn: number;
   }) {
-    const accessToken = this.create({
+    const accessToken = await this.create({
       user_id: user.id,
       expires_at: new Date(Date.now() + expiresIn),
     });
-
-    accessToken.save();
 
     accessToken.setUser(instanceToPlain(user) as User);
 
