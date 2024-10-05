@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { CategoriesService } from '../categories/categories.service';
+import { CategoriesService } from './services/categories.service';
 import { ListCategoriesResponse } from '../categories/responses/list-categories.response';
 import { CategoryItemResponse } from '../categories/responses/category-item.response';
 import { Category } from 'src/entities/categories/category.entity';
