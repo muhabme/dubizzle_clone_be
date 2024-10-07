@@ -1,16 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { User } from 'src/entities/users/user.entity';
 import { CrudService } from 'src/lib/services/crud.service';
-import { DeepPartial } from 'typeorm';
 
 @Injectable()
 export class UsersService extends CrudService<User> {
-  constructor() {
-    super(User);
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {
+    super(userRepository);
   }
 
-  public create(data: DeepPartial<User>): User {
-    const userData: DeepPartial<User> = data;
+  public async findByEmail(email: string): Promise<User | undefined> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
+
+  public async createUser(data: DeepPartial<User>): Promise<User> {
+    const userData: DeepPartial<User> = { ...data };
 
     if (
       userData.birth_date &&
@@ -20,8 +28,7 @@ export class UsersService extends CrudService<User> {
       userData.birth_date = new Date(userData.birth_date);
     }
 
-    const user = this.getRepository().create(data) as unknown as User;
-
-    return user;
+    const user = this.userRepository.create(userData as User);
+    return await this.userRepository.save(user);
   }
 }

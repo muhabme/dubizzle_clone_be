@@ -26,10 +26,12 @@ export class User extends BaseAuthenticatableModel {
   @Column({ type: 'varchar', length: 100, nullable: true })
   country: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  googleId: string;
+
   @OneToMany(() => AccessToken, (accessToken: AccessToken) => accessToken.user)
   access_tokens: AccessToken[];
 
-  // Assuming the user can have multiple listings
   @OneToMany(() => Listing, (listing: Listing) => listing.owner)
   listings: Listing[];
 }
