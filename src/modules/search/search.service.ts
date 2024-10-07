@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Listing } from '../listings/listings.entity';
+import { Listing } from '../classified-listings/listings.entity';
 
 /**
  * Service for searching and filtering listings.

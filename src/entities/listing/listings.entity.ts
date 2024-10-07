@@ -1,9 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from '../../entities/users/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from '../../users/user.entity';
 
-/**
- * Entity representing a classified listing.
- */
 @Entity({ name: 'listings' })
 export class Listing {
   @PrimaryGeneratedColumn()
@@ -15,11 +12,17 @@ export class Listing {
   @Column({ type: 'text' })
   description: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  category: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
-  @Column({ type: 'varchar', length: 100 })
-  location: string;
+  @Column({ type: 'varchar', length: 255 })
+  imageUrl: string;
+
+  @Column({ type: 'boolean', default: false })
+  promoted: boolean;
 
   @ManyToOne(() => User, (user) => user.listings)
   owner: User;
