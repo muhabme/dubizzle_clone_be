@@ -17,8 +17,21 @@ export class UsersService extends CrudService<User> {
     return await this.userRepository.findOne({ where: { email } });
   }
 
+  public async findByResetToken(resetToken: string): Promise<User | undefined> {
+    return await this.userRepository.findOne({ where: { resetToken } });
+  }
+
   public async createUser(data: DeepPartial<User>): Promise<User> {
-    const userData: DeepPartial<User> = { ...data };
+    const user = this.create(data);
+    return await this.userRepository.save(user);
+  }
+
+  public async saveUser(user: User): Promise<User> {
+    return await this.userRepository.save(user);
+  }
+
+  public create(data: DeepPartial<User>): User {
+    const userData: DeepPartial<User> = data;
 
     if (
       userData.birth_date &&
@@ -28,7 +41,7 @@ export class UsersService extends CrudService<User> {
       userData.birth_date = new Date(userData.birth_date);
     }
 
-    const user = this.userRepository.create(userData as User);
-    return await this.userRepository.save(user);
+    const user = this.userRepository.create(data as User);
+    return user;
   }
 }

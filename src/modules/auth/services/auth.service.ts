@@ -5,13 +5,13 @@ import { UsersService } from '../../users/services/users.service';
 export class AuthService {
   constructor(private readonly usersService: UsersService) {}
 
-  async validateGoogleUser(data: { googleId: string; email: string; name: string }) {
+  async validateGoogleUser(data: { googleId: string; email: string; full_name: string }) {
     let user = await this.usersService.findByEmail(data.email);
     if (!user) {
       user = await this.usersService.createUser({
         googleId: data.googleId,
         email: data.email,
-        name: data.name,
+        full_name: data.full_name,
         joinDate: new Date(),
       });
     }

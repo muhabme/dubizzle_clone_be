@@ -1,12 +1,15 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.entity';
 import { AccessToken } from '../access-token/access-token.entity';
-import { Listing } from '../../modules/listings/listings.entity'; // Assuming listings entity exists
+import { Listing } from '../../modules/listings/listings.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
   @Column({ type: 'varchar', length: 255 })
   full_name: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  name?: string; // Add 'name' property for compatibility with existing services
 
   @Column({ type: 'date' })
   birth_date: Date;
@@ -26,8 +29,8 @@ export class User extends BaseAuthenticatableModel {
   @Column({ type: 'varchar', length: 100, nullable: true })
   country: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  googleId: string;
+  @Column({ type: 'varchar', nullable: true })
+  resetToken?: string; // Add resetToken for password reset feature
 
   @OneToMany(() => AccessToken, (accessToken: AccessToken) => accessToken.user)
   access_tokens: AccessToken[];
