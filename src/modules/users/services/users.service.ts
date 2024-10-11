@@ -9,7 +9,7 @@ export class UsersService extends CrudService<User> {
     super(User);
   }
 
-  public create(data: DeepPartial<User>): User {
+  public async createUser(data: DeepPartial<User>): Promise<User> {
     const userData: DeepPartial<User> = data;
 
     if (
@@ -20,7 +20,7 @@ export class UsersService extends CrudService<User> {
       userData.birth_date = new Date(userData.birth_date);
     }
 
-    const user = this.getRepository().create(data) as unknown as User;
+    const user = await this.create(data);
 
     return user;
   }
