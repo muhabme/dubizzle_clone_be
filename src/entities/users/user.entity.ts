@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.entity';
 import { AccessToken } from '../access-token/access-token.entity';
-import { Listing } from '../../modules/classified-listings/listings.entity';
+import { Listing } from '../listing/listings.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {

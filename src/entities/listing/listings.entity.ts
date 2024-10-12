@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { User } from '../../users/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Category } from '../categories/category.entity';
+import { User } from '../users/user.entity';
 
 @Entity({ name: 'listings' })
 export class Listing {
@@ -12,8 +13,9 @@ export class Listing {
   @Column({ type: 'text' })
   description: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  category: string;
+  @ManyToOne(() => Category, (category) => category.listings)
+  category: Category;
+  
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
