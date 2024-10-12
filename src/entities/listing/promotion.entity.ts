@@ -1,12 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { BaseModel } from '../../lib/entities/base.entity';
 import { Listing } from './listings.entity';
 
 @Entity({ name: 'promotions' })
-export class Promotion {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => Listing, (listing) => listing.id)
+export class Promotion extends BaseModel {
+  @OneToOne(() => Listing, (listing) => listing.promotion)
+  @JoinColumn()
   listing: Listing;
 
   @Column({ type: 'varchar', length: 100 })
@@ -17,8 +16,4 @@ export class Promotion {
 
   @Column({ type: 'datetime' })
   endDate: Date;
-
-  @OneToOne(() => Listing, (listing) => listing.promotion)
-  listings: Listing[];
 }
-
