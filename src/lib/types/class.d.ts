@@ -1,3 +1,3 @@
-interface ClassConstructor {
+interface ClassConstructor<T> {
   new (...args: any[]): T;
 }
