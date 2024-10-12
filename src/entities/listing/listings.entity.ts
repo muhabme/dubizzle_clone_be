@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Review } from '../reviews-ratings/review.entity';
+import { Favorite } from '../favorite/favorite.entity';
 
 @Entity({ name: 'listings' })
 export class Listing {
@@ -30,4 +31,7 @@ export class Listing {
 
   @OneToMany(() => Review, (review) => review.listing, { nullable: true })
   reviews?: Review[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.listing)
+  favorites: Favorite[];
 }

@@ -3,6 +3,9 @@ import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.ent
 import { AccessToken } from '../access-token/access-token.entity';
 import { Listing } from '../listing/listings.entity';
 import { Review } from '../reviews-ratings/review.entity';
+import { Favorite } from '../favorite/favorite.entity';
+import { Conversation } from '../messaging/conversation.entity';
+import { Message } from '../messaging/message.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
@@ -10,7 +13,7 @@ export class User extends BaseAuthenticatableModel {
   full_name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  name?: string; // Add 'name' property for compatibility with existing services
+  name?: string; 
 
   @Column({ type: 'date' })
   birth_date: Date;
@@ -44,4 +47,16 @@ export class User extends BaseAuthenticatableModel {
 
   @OneToMany(() => Review, (review) => review.reviewee, { nullable: true })
   reviewsReceived?: Review[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites: Favorite[];
+
+  @OneToMany(() => Conversation, (conversation) => conversation.users)
+  conversations: Conversation[];
+
+  @OneToMany(() => Message, (message) => message.sender)
+  messages: Message[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 }

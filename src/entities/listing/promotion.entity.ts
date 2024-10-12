@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Listing } from './listings.entity';
+import { BaseModel } from 'src/lib/entities/base.entity';
 
 @Entity({ name: 'promotions' })
-export class Promotion {
+export class Promotion extends BaseModel {
   @PrimaryGeneratedColumn()
   id: number;
 
