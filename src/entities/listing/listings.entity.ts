@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { Category } from '../categories/category.entity';
 import { User } from '../users/user.entity';
+import { Promotion } from './promotion.entity';
 
 @Entity({ name: 'listings' })
 export class Listing {
@@ -22,9 +23,10 @@ export class Listing {
 
   @Column({ type: 'varchar', length: 255 })
   imageUrl: string;
-
-  @Column({ type: 'boolean', default: false })
-  promoted: boolean;
+ 
+  
+  @OneToOne(() => Promotion, (promotion) => promotion.listings)
+  promotion: Promotion;
 
   @ManyToOne(() => User, (user) => user.listings)
   owner: User;

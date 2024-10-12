@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
 import { Listing } from './listings.entity';
 
 @Entity({ name: 'promotions' })
@@ -17,4 +17,8 @@ export class Promotion {
 
   @Column({ type: 'datetime' })
   endDate: Date;
+
+  @OneToOne(() => Listing, (listing) => listing.promotion)
+  listings: Listing[];
 }
+
