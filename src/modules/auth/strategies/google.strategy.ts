@@ -1,4 +1,3 @@
-
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
@@ -25,7 +24,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const user = await this.authService.validateGoogleUser({
       googleId: id,
       email: emails[0].value,
-      name: displayName,
+      full_name: displayName, // Change 'name' to 'full_name' here
     });
     done(null, user);
   }

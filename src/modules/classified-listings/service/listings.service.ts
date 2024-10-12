@@ -17,7 +17,7 @@ export class ListingsService extends CrudService<Listing> {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {
-    super(Listing);
+    super(listingsRepository);
   }
 
   async createListing(createListingDto: CreateListingDto): Promise<Listing> {

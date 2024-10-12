@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Review } from '../reviews-ratings/review.entity';
 import { Favorite } from '../favorite/favorite.entity';
 import { Promotion } from './promotion.entity';
@@ -6,9 +6,11 @@ import { BaseModel } from '../../lib/entities/base.entity';
 import { Category } from '../categories/category.entity';
 import { User } from '../users/user.entity';
 
-
 @Entity({ name: 'listings' })
 export class Listing extends BaseModel {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column({ type: 'varchar', length: 255 })
   title: string;
 
@@ -35,4 +37,7 @@ export class Listing extends BaseModel {
 
   @OneToMany(() => Favorite, (favorite) => favorite.listing)
   favorites: Favorite[];
+
+  @OneToMany(() => Promotion, (promotion) => promotion.listing)
+  promotions: Promotion[];
 }

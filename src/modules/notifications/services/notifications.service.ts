@@ -11,13 +11,19 @@ export class NotificationsService {
     private readonly notificationRepository: Repository<Notification>,
   ) {}
 
-  async createNotification(user: User, content: string): Promise<Notification> {
-    const notification = this.notificationRepository.create({ user, content });
+  async createNotification(user: User, message: string): Promise<Notification> {
+    const notification = this.notificationRepository.create({
+      user,
+      message,
+    });
     return await this.notificationRepository.save(notification);
   }
 
   async getUserNotifications(userId: number): Promise<Notification[]> {
-    return await this.notificationRepository.find({ where: { user: { id: userId } }, order: { createdAt: 'DESC' } });
+    return await this.notificationRepository.find({
+      where: { user: { id: userId } },
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async markAsRead(notificationId: number): Promise<Notification> {

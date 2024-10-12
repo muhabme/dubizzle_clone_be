@@ -1,4 +1,3 @@
-
 import { Controller, Post, Get, Body, Param } from '@nestjs/common';
 import { MessagingService } from '../services/messaging.service';
 
@@ -16,4 +15,3 @@ export class MessagingController {
     return await this.messagingService.getMessages(conversationId);
   }
 }
-s

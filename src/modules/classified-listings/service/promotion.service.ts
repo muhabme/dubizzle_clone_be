@@ -14,7 +14,7 @@ export class PromotionService extends CrudService<Promotion> {
     @InjectRepository(Listing)
     private readonly listingRepository: Repository<Listing>,
   ) {
-    super(Promotion);
+    super(promotionRepository);
   }
 
   async promoteListing(listingId: number, promoteListingDto: PromoteListingDto): Promise<Promotion> {

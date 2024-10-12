@@ -22,26 +22,19 @@ export class UsersService extends CrudService<User> {
   }
 
   public async createUser(data: DeepPartial<User>): Promise<User> {
-    const user = this.create(data);
+    if (
+      data.birth_date &&
+      !(data.birth_date instanceof Date) &&
+      typeof data.birth_date !== 'object'
+    ) {
+      data.birth_date = new Date(data.birth_date);
+    }
+
+    const user = this.userRepository.create(data);
     return await this.userRepository.save(user);
   }
 
   public async saveUser(user: User): Promise<User> {
     return await this.userRepository.save(user);
-  }
-
-  public create(data: DeepPartial<User>): User {
-    const userData: DeepPartial<User> = data;
-
-    if (
-      userData.birth_date &&
-      !(userData.birth_date instanceof Date) &&
-      typeof userData.birth_date !== 'object'
-    ) {
-      userData.birth_date = new Date(userData.birth_date);
-    }
-
-    const user = this.userRepository.create(data as User);
-    return user;
   }
 }

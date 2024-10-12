@@ -5,11 +5,11 @@ import {
   FindOneOptions,
   FindOptionsWhere,
   SaveOptions,
+  Repository,
 } from 'typeorm';
-import { FindOptions } from '../utils/find-options';
 
 export abstract class CrudService<T extends BaseEntity> {
-  protected constructor(protected entity: typeof BaseEntity) {}
+  protected constructor(protected repository: Repository<T>) {}
 
   async create(
     attributes: DeepPartial<T>,
@@ -26,72 +26,50 @@ export abstract class CrudService<T extends BaseEntity> {
     saveOptions?: SaveOptions,
   ): Promise<T | T[]> {
     if (Array.isArray(attributes)) {
-      const e = this.getRepository().create(
-        attributes as Array<DeepPartial<BaseEntity>>,
-      ) as unknown as T[];
+      const e = this.repository.create(
+        attributes as Array<DeepPartial<T>>,
+      ) as T[];
 
       for await (const item of e) {
-        await item.save();
+        await this.repository.save(item);
       }
 
       return e;
     }
 
-    const e = this.getRepository().create(
-      attributes as DeepPartial<BaseEntity>,
-    ) as unknown as T;
-
-    return e.save(saveOptions);
+    const e = this.repository.create(attributes as DeepPartial<T>);
+    return this.repository.save(e, saveOptions);
   }
 
   async findAndCount(options?: FindManyOptions<T>): Promise<[T[], number]> {
-    return this.getEntity().buildQuery(options).getManyAndCount();
+    return this.repository.findAndCount(options);
   }
 
   public async findOneById(id: any): Promise<T> {
-    const options: FindOptionsWhere<T> = {
-      id,
-    } as FindOptionsWhere<T>;
-    return (await this.getRepository().findOneBy(
-      options as FindOptionsWhere<BaseEntity>,
-    )) as unknown as Promise<T>;
+    return this.repository.findOneBy({ id } as FindOptionsWhere<T>);
   }
 
   public async findByCondition(filterCondition: FindOneOptions<T>): Promise<T> {
-    return (await this.getRepository().findOne(
-      filterCondition as FindOneOptions<BaseEntity>,
-    )) as unknown as Promise<T>;
+    return this.repository.findOne(filterCondition);
   }
 
   public async findWithRelations(relations: FindManyOptions<T>): Promise<T[]> {
-    return (await this.getRepository().find(
-      relations as FindManyOptions<BaseEntity>,
-    )) as unknown as Promise<T[]>;
+    return this.repository.find(relations);
   }
 
   public async findAll(options?: FindManyOptions<T>): Promise<T[]> {
-    return (await this.getRepository().find(
-      options as FindManyOptions<BaseEntity>,
-    )) as unknown as Promise<T[]>;
+    return this.repository.find(options);
   }
 
   public async remove(data: T): Promise<T> {
-    return (await this.getRepository().remove(data)) as unknown as Promise<T>;
+    return this.repository.remove(data);
   }
 
   public async preload(entityLike: DeepPartial<T>): Promise<T> {
-    return (await this.getRepository().preload(
-      entityLike,
-    )) as unknown as Promise<T>;
+    return this.repository.preload(entityLike);
   }
 
   protected getRepository() {
-    return this.getEntity().getRepository();
-  }
-
-  protected getEntity() {
-    if (!this.entity) throw new Error('No entity found');
-
-    return this.entity as typeof BaseEntity & T & typeof FindOptions;
+    return this.repository;
   }
 }

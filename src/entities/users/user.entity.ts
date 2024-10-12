@@ -1,12 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { AccessToken } from '../access-token/access-token.entity';
 import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.entity';
-import { AccessToken } from '../access-token/access-token.entity';
 import { Listing } from '../listing/listings.entity';
 import { Review } from '../reviews-ratings/review.entity';
 import { Favorite } from '../favorite/favorite.entity';
 import { Conversation } from '../messaging/conversation.entity';
 import { Message } from '../messaging/message.entity';
+import { Notification } from '../notification/notification.entity';
+import { Payment } from '../payments/payment.entity';
+import { Promotion } from '../listing/promotion.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
@@ -17,7 +19,7 @@ export class User extends BaseAuthenticatableModel {
   full_name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  name?: string; 
+  name?: string;
 
   @Column({ type: 'date' })
   birth_date: Date;
@@ -27,9 +29,6 @@ export class User extends BaseAuthenticatableModel {
 
   @Column({ type: 'boolean', default: false })
   isBlocked: boolean;
-
-  @Column({ type: 'date' })
-  birth_date: Date;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone_number: string;
@@ -46,7 +45,7 @@ export class User extends BaseAuthenticatableModel {
   @Column({ type: 'varchar', nullable: true })
   resetToken?: string;
 
-  @OneToMany(() => AccessToken, (accessToken: AccessToken) => accessToken.user)
+  @OneToMany(() => AccessToken, (accessToken) => accessToken.user)
   access_tokens: AccessToken[];
 
   @OneToMany(() => Listing, (listing) => listing.owner)
@@ -69,4 +68,16 @@ export class User extends BaseAuthenticatableModel {
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
+
+  @OneToMany(() => Payment, (payment) => payment.user)
+  payments: Payment[];
+
+  @OneToMany(() => Promotion, (promotion) => promotion.user)
+  promotions: Promotion[];
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  googleId?: string;
+
+  @Column({ type: 'date', default: () => 'CURRENT_DATE' })
+  joinDate: Date;
 }
