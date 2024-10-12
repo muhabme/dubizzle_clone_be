@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { BaseModel } from '../../lib/entities/base.entity';
 import { Listing } from './listings.entity';
 import { BaseModel } from 'src/lib/entities/base.entity';
 
@@ -8,6 +9,9 @@ export class Promotion extends BaseModel {
   id: number;
 
   @ManyToOne(() => Listing, (listing) => listing.id)
+export class Promotion extends BaseModel {
+  @OneToOne(() => Listing, (listing) => listing.promotion)
+  @JoinColumn()
   listing: Listing;
 
   @Column({ type: 'varchar', length: 100 })
