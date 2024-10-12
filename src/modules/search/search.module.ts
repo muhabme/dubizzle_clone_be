@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SearchService } from './search.service';
-import { SearchController } from './search.controller';
-import { Listing } from '../listings/listings.entity';
+import { SearchController } from './controllers/search.controller';
+import { SearchService } from './services/search.service';
+import { Listing } from 'src/entities/listing/listings.entity';
 
-/**
- * Module for managing search and filtering listings.
- */
 @Module({
   imports: [TypeOrmModule.forFeature([Listing])],
   controllers: [SearchController],
