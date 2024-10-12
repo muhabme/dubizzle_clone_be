@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { CategoriesService } from './services/categories.service';
-import { ListCategoriesResponse } from '../categories/responses/list-categories.response';
-import { CategoryItemResponse } from '../categories/responses/category-item.response';
+
 import { Category } from 'src/entities/categories/category.entity';
+import { CategoriesService } from '../services/categories.service';
+import { ListCategoriesResponse } from '../responses/list-categories.response';
+import { CategoryItemResponse } from '../responses/category-item.response';
 
 @Controller('categories')
 export class CategoriesController {
