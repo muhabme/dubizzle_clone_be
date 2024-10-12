@@ -1,17 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, Column } from 'typeorm';
-import { Message } from './message.entity';
+import { Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinTable, Column } from 'typeorm';
+import { BaseModel } from '../../lib/entities/base.entity';
 import { User } from '../users/user.entity';
+import { Message } from './message.entity';
 
 @Entity()
-export class Conversation {
+export class Conversation extends BaseModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.conversations)
-  user1: User;
-
-  @ManyToOne(() => User, (user) => user.conversations)
-  user2: User;
+  @ManyToMany(() => User, (user) => user.conversations)
+  @JoinTable()
+  users: User[];
 
   @OneToMany(() => Message, (message) => message.conversation)
   messages: Message[];

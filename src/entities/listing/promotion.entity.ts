@@ -1,12 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Listing } from './listings.entity';
+import { BaseModel } from 'src/lib/entities/base.entity';
 
 @Entity({ name: 'promotions' })
-export class Promotion {
+export class Promotion extends BaseModel {
   @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => Listing, (listing) => listing.id)
+export class Promotion extends BaseModel {
+  @OneToOne(() => Listing, (listing) => listing.promotion)
+  @JoinColumn()
   listing: Listing;
 
   @Column({ type: 'varchar', length: 100 })

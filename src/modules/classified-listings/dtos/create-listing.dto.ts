@@ -20,4 +20,11 @@ export class CreateListingDto {
   @IsString()
   @IsNotEmpty()
   imageUrl: string;
+
+
+  @IsNumber()
+  categoryId: number;
+
+  @IsNumber()
+  ownerId: number;
 }

@@ -1,9 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn } from 'typeorm';
+import { BaseModel } from '../../lib/entities/base.entity';
 import { Conversation } from './conversation.entity';
 import { User } from '../users/user.entity';
 
 @Entity()
-export class Message {
+export class Message extends BaseModel {
   @PrimaryGeneratedColumn()
   id: number;
 
