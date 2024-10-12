@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Listing } from '../../../entities/listing/listings.entity';
 import { CreateListingDto } from '../dtos/create-listing.dto';
 
-@Injectable()
 export class ListingsService {
   constructor(
     @InjectRepository(Listing)
