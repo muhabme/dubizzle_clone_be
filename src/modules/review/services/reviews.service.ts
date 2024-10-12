@@ -1,16 +1,20 @@
+// src/modules/review/services/reviews.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Listing } from 'src/entities/listing/listings.entity';
-import { Review } from 'src/entities/reviews-ratings/review.entity';
-import { User } from 'src/entities/users/user.entity';
 import { Repository } from 'typeorm';
+import { Review } from 'src/entities/reviews-ratings/review.entity';
+import { CrudService } from '../../../lib/services/crud.service';
+import { User } from 'src/entities/users/user.entity';
+import { Listing } from 'src/entities/listing/listings.entity';
 
 @Injectable()
-export class ReviewsService {
+export class ReviewsService extends CrudService<Review> {
   constructor(
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
-  ) {}
+  ) {
+    super(Review);
+  }
 
   async createReview(data: {
     reviewer: User;

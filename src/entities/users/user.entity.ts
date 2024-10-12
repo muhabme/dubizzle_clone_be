@@ -1,7 +1,8 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.entity';
 import { AccessToken } from '../access-token/access-token.entity';
-import { Listing } from '../../modules/classified-listings/listings.entity';
+import { Listing } from '../listing/listings.entity';
+import { Review } from '../reviews-ratings/review.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
@@ -37,4 +38,10 @@ export class User extends BaseAuthenticatableModel {
 
   @OneToMany(() => Listing, (listing: Listing) => listing.owner)
   listings: Listing[];
+
+  @OneToMany(() => Review, (review) => review.reviewer)
+  reviewsGiven: Review[];
+
+  @OneToMany(() => Review, (review) => review.reviewee, { nullable: true })
+  reviewsReceived?: Review[];
 }

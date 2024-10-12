@@ -1,27 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+// src/entities/reviews-ratings/review.entity.ts
+import { Entity, Column, ManyToOne } from 'typeorm';
+import { BaseModel } from '../../lib/entities/base.entity';
 import { User } from '../users/user.entity';
 import { Listing } from '../listing/listings.entity';
 
 @Entity({ name: 'reviews' })
-export class Review {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne(() => User, (user) => user.reviewsWritten, { onDelete: 'CASCADE' })
+export class Review extends BaseModel {
+  @ManyToOne(() => User, (user) => user.reviewsGiven)
   reviewer: User;
 
-  @ManyToOne(() => User, (user) => user.reviewsReceived, { nullable: true, onDelete: 'CASCADE' })
-  reviewee: User;
+  @ManyToOne(() => User, (user) => user.reviewsReceived, { nullable: true })
+  reviewee?: User;
 
-  @ManyToOne(() => Listing, (listing) => listing.reviews, { nullable: true, onDelete: 'CASCADE' })
-  listing: Listing;
+  @ManyToOne(() => Listing, (listing) => listing.reviews, { nullable: true })
+  listing?: Listing;
 
-  @Column({ type: 'int' })
+  @Column('int')
   rating: number;
 
-  @Column({ type: 'text' })
+  @Column('text')
   comment: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
 }

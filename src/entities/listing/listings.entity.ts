@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { User } from '../users/user.entity';
+import { Review } from '../reviews-ratings/review.entity';
 
 @Entity({ name: 'listings' })
 export class Listing {
@@ -26,4 +27,7 @@ export class Listing {
 
   @ManyToOne(() => User, (user) => user.listings)
   owner: User;
+
+  @OneToMany(() => Review, (review) => review.listing, { nullable: true })
+  reviews?: Review[];
 }
