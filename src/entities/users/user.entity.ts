@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { AccessToken } from '../access-token/access-token.entity';
 import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.entity';
 import { AccessToken } from '../access-token/access-token.entity';
 import { Listing } from '../listing/listings.entity';
@@ -9,6 +10,9 @@ import { Message } from '../messaging/message.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
+  @PrimaryGeneratedColumn()
+  id: number;
+
   @Column({ type: 'varchar', length: 255 })
   full_name: string;
 
@@ -20,6 +24,12 @@ export class User extends BaseAuthenticatableModel {
 
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
+
+  @Column({ type: 'boolean', default: false })
+  isBlocked: boolean;
+
+  @Column({ type: 'date' })
+  birth_date: Date;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone_number: string;
@@ -34,12 +44,12 @@ export class User extends BaseAuthenticatableModel {
   country: string;
 
   @Column({ type: 'varchar', nullable: true })
-  resetToken?: string; // Add resetToken for password reset feature
+  resetToken?: string;
 
   @OneToMany(() => AccessToken, (accessToken: AccessToken) => accessToken.user)
   access_tokens: AccessToken[];
 
-  @OneToMany(() => Listing, (listing: Listing) => listing.owner)
+  @OneToMany(() => Listing, (listing) => listing.owner)
   listings: Listing[];
 
   @OneToMany(() => Review, (review) => review.reviewer)
