@@ -1,10 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { User } from '../../users/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { Review } from '../reviews-ratings/review.entity';
 import { Favorite } from '../favorite/favorite.entity';
 import { Promotion } from './promotion.entity';
 import { BaseModel } from '../../lib/entities/base.entity';
 import { Category } from '../categories/category.entity';
+import { User } from '../users/user.entity';
 
 
 @Entity({ name: 'listings' })
