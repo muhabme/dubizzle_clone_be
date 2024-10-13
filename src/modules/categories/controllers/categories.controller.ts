@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { CategoriesService } from '../services/categories.service';
-import { ListCategoriesResponse } from '../responses/list-categories.response';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CategoryItemResponse } from '../responses/category-item.response';
+import { ListCategoriesResponse } from '../responses/list-categories.response';
+import { CategoriesService } from '../services/categories.service';
 
 @Controller('categories')
 export class CategoriesController {
@@ -15,7 +15,7 @@ export class CategoriesController {
 
   @Post()
   async createCategory(@Body() body: { name: string; description: string }) {
-    const category = await this.categoriesService.createCategory(body.name, body.description);
+    const category = await this.categoriesService.create(body);
     return new CategoryItemResponse(category).getJson();
   }
 }

@@ -37,7 +37,6 @@ export class MessagingService {
     }
 
     const message = this.messageRepository.create({ conversation, sender, content });
-    conversation.lastUpdated = new Date();
     await this.conversationRepository.save(conversation);
 
     return await this.messageRepository.save(message);

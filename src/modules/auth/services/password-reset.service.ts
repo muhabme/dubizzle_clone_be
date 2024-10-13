@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../../users/services/users.service';
 import { MailService } from '../../mail/mail.service';
+import { UsersService } from '../../users/services/users.service';
 
 @Injectable()
 export class PasswordResetService {
@@ -15,7 +15,7 @@ export class PasswordResetService {
     // Generate reset token
     const token = 'some-unique-token';
     user.resetToken = token;
-    await this.usersService.saveUser(user);
+    await user.save();
     // Send email with reset instructions
     await this.mailService.sendPasswordResetMail(user, token);
   }
@@ -25,6 +25,6 @@ export class PasswordResetService {
     if (!user) throw new Error('Invalid or expired token');
     user.password = newPassword; // You should hash this password before saving
     user.resetToken = null;
-    await this.usersService.saveUser(user);
+    await user.save();
   }
 }

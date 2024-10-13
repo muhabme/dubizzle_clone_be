@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
 import { instanceToPlain } from 'class-transformer';
 import * as toMilliseconds from 'ms';
 import { AccessToken } from 'src/entities/access-token/access-token.entity';
@@ -11,12 +9,8 @@ import { Env } from 'src/lib/utils/env';
 
 @Injectable()
 export class AccessTokenService extends CrudService<AccessToken> {
-  constructor(
-    @InjectRepository(AccessToken)
-    private readonly accessTokenRepository: Repository<AccessToken>,
-    private jwtService: JwtService,
-  ) {
-    super(accessTokenRepository);
+  constructor(private jwtService: JwtService) {
+    super(AccessToken);
   }
 
   static getExpiresInMs(): number {

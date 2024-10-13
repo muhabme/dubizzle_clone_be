@@ -1,20 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { AccessToken } from '../access-token/access-token.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseAuthenticatableModel } from '../../lib/entities/authenticatable.entity';
-import { Listing } from '../listing/listings.entity';
-import { Review } from '../reviews-ratings/review.entity';
+import { AccessToken } from '../access-token/access-token.entity';
 import { Favorite } from '../favorite/favorite.entity';
+import { Listing } from '../listing/listings.entity';
+import { Promotion } from '../listing/promotion.entity';
 import { Conversation } from '../messaging/conversation.entity';
 import { Message } from '../messaging/message.entity';
 import { Notification } from '../notification/notification.entity';
 import { Payment } from '../payments/payment.entity';
-import { Promotion } from '../listing/promotion.entity';
+import { Review } from '../reviews-ratings/review.entity';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @Column({ type: 'varchar', length: 255 })
   full_name: string;
 
@@ -23,9 +20,6 @@ export class User extends BaseAuthenticatableModel {
 
   @Column({ type: 'date' })
   birth_date: Date;
-
-  @Column({ type: 'varchar', length: 255, unique: true })
-  email: string;
 
   @Column({ type: 'boolean', default: false })
   isBlocked: boolean;
@@ -77,7 +71,4 @@ export class User extends BaseAuthenticatableModel {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   googleId?: string;
-
-  @Column({ type: 'date', default: () => 'CURRENT_DATE' })
-  joinDate: Date;
 }

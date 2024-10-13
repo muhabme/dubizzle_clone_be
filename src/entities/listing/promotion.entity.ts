@@ -1,13 +1,10 @@
-import { Entity, Column, OneToOne, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Listing } from './listings.entity';
 import { BaseModel } from 'src/lib/entities/base.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { User } from '../users/user.entity';
+import { Listing } from './listings.entity';
 
 @Entity({ name: 'promotions' })
 export class Promotion extends BaseModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @OneToOne(() => Listing, (listing) => listing.promotion)
   @JoinColumn()
   listing: Listing;

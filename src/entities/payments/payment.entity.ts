@@ -1,11 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { BaseModel } from 'src/lib/entities/base.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne
+} from 'typeorm';
 import { User } from '../users/user.entity';
 
 @Entity({ name: 'payments' })
-export class Payment {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Payment extends BaseModel {
   @Column({ type: 'varchar', length: 100 })
   provider: string;
 

@@ -1,12 +1,9 @@
-import { Entity, ManyToOne, Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../users/user.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne } from 'typeorm';
 import { BaseModel } from '../../lib/entities/base.entity';
+import { User } from '../users/user.entity';
 
 @Entity({ name: 'notifications' })
 export class Notification extends BaseModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @ManyToOne(() => User, (user) => user.notifications, { onDelete: 'CASCADE' })
   user: User;
 

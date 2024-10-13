@@ -1,16 +1,13 @@
-import { Entity, Column, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Review } from '../reviews-ratings/review.entity';
-import { Favorite } from '../favorite/favorite.entity';
-import { Promotion } from './promotion.entity';
+import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { BaseModel } from '../../lib/entities/base.entity';
 import { Category } from '../categories/category.entity';
+import { Favorite } from '../favorite/favorite.entity';
+import { Review } from '../reviews-ratings/review.entity';
 import { User } from '../users/user.entity';
+import { Promotion } from './promotion.entity';
 
 @Entity({ name: 'listings' })
 export class Listing extends BaseModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @Column({ type: 'varchar', length: 255 })
   title: string;
 
