@@ -4,8 +4,9 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  Generated,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import { BaseResponse } from '../responses/base.response';
 import { FindOptions } from '../utils/find-options';
@@ -17,9 +18,9 @@ export abstract class BaseModel extends Mixin(BaseEntity, FindOptions) {
   @Column({
     type: 'varchar',
     length: 36,
-    default: () => '(UUID())',
     unique: true,
   })
+  @Generated('uuid')
   uuid: string;
 
   @CreateDateColumn()
