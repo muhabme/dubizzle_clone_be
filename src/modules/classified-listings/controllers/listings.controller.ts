@@ -11,7 +11,7 @@ export class ListingsController {
     private readonly promotionService: PromotionService,
   ) {}
 
-  @Post()
+  @Post(':id')
   async createListing(@Body() createListingDto: CreateListingDto) {
     return await this.listingsService.createListing(createListingDto);
   }

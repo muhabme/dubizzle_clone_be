@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CategoryItemResponse } from '../responses/category-item.response';
 import { ListCategoriesResponse } from '../responses/list-categories.response';
 import { CategoriesService } from '../services/categories.service';
@@ -18,4 +18,20 @@ export class CategoriesController {
     const category = await this.categoriesService.create(body);
     return new CategoryItemResponse(category).getJson();
   }
+
+  // @Patch(':id')
+  // async updateCategory(
+  //   @Param('id') id: string,
+  //   @Body() body: { name?: string; description?: string },
+  // ) {
+  //   const updatedCategory = await this.categoriesService.update(id, body);
+  //   return new CategoryItemResponse(updatedCategory).getJson();
+  // }
+
+  // @Delete(':id')
+  // async deleteCategory(@Param('id') id: string) {
+  //   await this.categoriesService.delete(id);
+  //   return { message: 'Category deleted successfully.' };
+  // }
+
 }

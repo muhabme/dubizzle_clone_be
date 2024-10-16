@@ -50,6 +50,9 @@ importers:
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
+      es6-shim:
+        specifier: ^0.35.8
+        version: 0.35.8
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -86,6 +89,9 @@ importers:
       socket.io:
         specifier: ^4.8.0
         version: 4.8.0
+      ts-mixer:
+        specifier: ^6.0.4
+        version: 6.0.4
       typeorm:
         specifier: 0.3.20
         version: 0.3.20(mysql2@3.11.3)(pg@8.13.0)(ts-node@10.9.2(@types/node@22.6.0)(typescript@5.6.2))
@@ -1507,6 +1513,9 @@ packages:
 
   es-module-lexer@1.5.4:
     resolution: {integrity: sha512-MVNK56NiMrOwitFB7cqDwq0CQutbw+0BvLshJSse0MUNU+y1FC3bUS/AQg7oUng+/wKrrki7JfmwtVHkVfPLlw==}
+
+  es6-shim@0.35.8:
+    resolution: {integrity: sha512-Twf7I2v4/1tLoIXMT8HlqaBSS5H2wQTs2wx3MNYCI8K1R1/clXyCazrcVCPm/FuO9cyV8+leEaZOWD5C253NDg==}
 
   escalade@3.1.2:
     resolution: {integrity: sha512-ErCHMCae19vR8vQGe50xIsVomy19rg6gFu3+r3jkEO46suLMWBksvVyoGgQV+jOfl84ZSOSlmv6Gxa89PmTGmA==}
@@ -3117,6 +3126,9 @@ packages:
     peerDependencies:
       typescript: '*'
       webpack: ^5.0.0
+
+  ts-mixer@6.0.4:
+    resolution: {integrity: sha512-ufKpbmrugz5Aou4wcr5Wc1UUFWOLhq+Fm6qa6P0w0K5Qw2yhaUoiWszhCVuNQyNwrlGiscHOmqYoAox1PtvgjA==}
 
   ts-node@10.9.2:
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
@@ -5020,6 +5032,8 @@ snapshots:
 
   es-module-lexer@1.5.4: {}
 
+  es6-shim@0.35.8: {}
+
   escalade@3.1.2: {}
 
   escape-html@1.0.3: {}
@@ -6837,6 +6851,8 @@ snapshots:
       source-map: 0.7.4
       typescript: 5.6.2
       webpack: 5.94.0
+
+  ts-mixer@6.0.4: {}
 
   ts-node@10.9.2(@types/node@22.6.0)(typescript@5.6.2):
     dependencies:

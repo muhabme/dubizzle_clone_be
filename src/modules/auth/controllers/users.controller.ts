@@ -1,5 +1,3 @@
-// src/modules/users/services/users.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
