@@ -37,7 +37,7 @@ export class User extends BaseAuthenticatableModel {
   country: string;
 
   @Column({ type: 'varchar', nullable: true })
-  resetToken?: string;
+  resetToken?: string | null;
 
   @OneToMany(() => AccessToken, (accessToken) => accessToken.user)
   access_tokens: AccessToken[];
