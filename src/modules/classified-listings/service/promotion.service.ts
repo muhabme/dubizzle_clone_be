@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Listing } from '../../../entities/listing/listings.entity';
 import { Promotion } from '../../../entities/listing/promotion.entity';
 import { CrudService } from '../../../lib/services/crud.service';
 import { PromoteListingDto } from '../dtos/promote-listing.dto';
@@ -8,10 +6,7 @@ import { ListingsService } from './listings.service';
 
 @Injectable()
 export class PromotionService extends CrudService<Promotion> {
-  constructor(
-    @InjectRepository(Listing)
-    private readonly listingsService: ListingsService,
-  ) {
+  constructor(private readonly listingsService: ListingsService) {
     super(Promotion);
   }
 

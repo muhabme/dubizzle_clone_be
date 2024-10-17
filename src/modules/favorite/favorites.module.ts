@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Favorite } from 'src/entities/favorite/favorite.entity';
-import { UsersModule } from '../users/users.module';
 import { ListingsModule } from '../classified-listings/listings.module';
+import { UsersModule } from '../users/users.module';
 import { FavoritesController } from './Controller/favorites.controller';
 import { FavoritesService } from './Service/favorites.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Favorite]), UsersModule, ListingsModule],
+  imports: [UsersModule, ListingsModule],
   controllers: [FavoritesController],
   providers: [FavoritesService],
 })
