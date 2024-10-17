@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
+import { IsMediaFile } from 'src/lib/rules/is-media-file.rule';
 
 export class CreateListingDto {
   @IsString()
@@ -17,10 +24,10 @@ export class CreateListingDto {
   @IsNotEmpty()
   price: number;
 
-  @IsString()
-  @IsNotEmpty()
-  imageUrl: string;
-
+  @IsArray()
+  @ArrayMinSize(1)
+  @IsMediaFile()
+  images: string;
 
   @IsNumber()
   categoryId: number;

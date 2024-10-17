@@ -1,3 +1,4 @@
+import { IAttachment } from 'src/lib/types/attachment';
 import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { BaseModel } from '../../lib/entities/base.entity';
 import { Category } from '../categories/category.entity';
@@ -22,6 +23,9 @@ export class Listing extends BaseModel {
 
   @Column({ type: 'varchar', length: 255 })
   imageUrl: string;
+
+  @Column({ type: 'json' })
+  images?: IAttachment[];
 
   @OneToOne(() => Promotion, (promotion) => promotion.listing)
   promotion: Promotion;
