@@ -44,7 +44,7 @@ export class PromotionsService extends CrudService<Promotion> {
   }
 
   async deletePromotion(promotionId: number): Promise<void> {
-    const promotion = await this.findOneById({ id: promotionId });
+    const promotion = await this.first({ id: promotionId });
     if (!promotion) {
       throw new NotFoundException('Promotion not found');
     }

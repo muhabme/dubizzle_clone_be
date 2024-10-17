@@ -21,9 +21,6 @@ export class Listing extends BaseModel {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  imageUrl: string;
-
   @Column({ type: 'json' })
   images?: IAttachment[];
 
