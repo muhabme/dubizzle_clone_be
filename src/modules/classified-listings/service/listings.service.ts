@@ -1,15 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Media } from 'src/entities/media-center/media.entity';
 import { CrudService } from 'src/lib/services/crud.service';
 import { CategoriesService } from 'src/modules/categories/services/categories.service';
+import { AttachmentsService } from 'src/modules/media-center/services/attachments.service';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { Listing } from '../../../entities/listing/listings.entity';
 import { CreateListingDto } from '../dtos/create-listing.dto';
+
+const ATTACHMENTS_FOLDER = 'attachments/listings';
 
 @Injectable()
 export class ListingsService extends CrudService<Listing> {
   constructor(
     private readonly categoriesService: CategoriesService,
     private readonly usersService: UsersService,
+    private readonly attachmentsService: AttachmentsService,
   ) {
     super(Listing);
   }
@@ -29,11 +34,27 @@ export class ListingsService extends CrudService<Listing> {
       throw new NotFoundException(`User with ID ${ownerId} not found`);
     }
 
-    return this.create({
+    const images = await this.attachmentsService.validateAndMapTo(
+      ATTACHMENTS_FOLDER,
+      listingData.images as unknown as Media[],
+    );
+
+    const listing = await this.create({
       ...listingData,
       category,
       owner,
+      images,
     });
+
+    if (images) {
+      await this.attachmentsService.saveToDestination({
+        relatedModel: listing,
+        items: listingData.images as unknown as Media[],
+        folder: ATTACHMENTS_FOLDER,
+      });
+    }
+
+    return listing;
   }
 
   async findAllListings(): Promise<Listing[]> {
