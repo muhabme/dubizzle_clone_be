@@ -99,6 +99,16 @@ export abstract class CrudService<T extends BaseEntity> {
     return (await this.getRepository().remove(d)) as unknown as Promise<T>;
   }
 
+  public async update(
+    data: T | FindOptionsWhere<T>,
+    attributes: DeepPartial<T>,
+  ): Promise<T> {
+    return (await this.getRepository().update(
+      data as FindOptionsWhere<BaseEntity>,
+      attributes as DeepPartial<BaseEntity>,
+    )) as unknown as Promise<T>;
+  }
+
   public async preload(entityLike: DeepPartial<T>): Promise<T> {
     return (await this.getRepository().preload(
       entityLike,
