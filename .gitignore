@@ -6,5 +6,4 @@ tmp/
 temp/
 /dist
 .env
-.env.development
 src/db/migrations

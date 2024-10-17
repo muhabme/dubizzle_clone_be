@@ -1,7 +1,8 @@
+// src/db/typeorm.config.ts
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { toBoolean } from 'src/lib/helpers/boolean';
+import { toBoolean } from 'src/lib/helpers/boolean'; // Adjust this import based on your helpers path
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 @Injectable()
@@ -35,6 +36,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   }
 }
 
+// Data source factory
 export const typeOrmDataSourceFactory = async (options: DataSourceOptions) => {
   try {
     const dataSource = await new DataSource(options).initialize();
@@ -42,7 +44,7 @@ export const typeOrmDataSourceFactory = async (options: DataSourceOptions) => {
 
     return dataSource;
   } catch (error) {
-    console.log('Error connecting to database');
+    console.error('Error connecting to database:', error);
     throw error;
   }
 };

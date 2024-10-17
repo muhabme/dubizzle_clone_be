@@ -9,19 +9,23 @@ export class UsersService extends CrudService<User> {
     super(User);
   }
 
-  public async createUser(data: DeepPartial<User>): Promise<User> {
-    const userData: DeepPartial<User> = data;
+  public async findByEmail(email: string): Promise<User | undefined> {
+    return await this.findOne({ where: { email } });
+  }
 
+  public async findByResetToken(resetToken: string): Promise<User | undefined> {
+    return await this.findOne({ where: { resetToken } });
+  }
+
+  public async createUser(data: DeepPartial<User>): Promise<User> {
     if (
-      userData.birth_date &&
-      !(userData.birth_date instanceof Date) &&
-      typeof userData.birth_date !== 'object'
+      data.birth_date &&
+      !(data.birth_date instanceof Date) &&
+      typeof data.birth_date !== 'object'
     ) {
-      userData.birth_date = new Date(userData.birth_date);
+      data.birth_date = new Date(data.birth_date);
     }
 
-    const user = await this.create(data);
-
-    return user;
+    return await this.create(data);
   }
 }

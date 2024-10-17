@@ -48,10 +48,22 @@ export abstract class CrudService<T extends BaseEntity> {
     return this.getEntity().buildQuery(options).getManyAndCount();
   }
 
-  public async findOneById(id: any): Promise<T> {
-    const options: FindOptionsWhere<T> = {
-      id,
-    } as FindOptionsWhere<T>;
+  async findOne(options?: FindOneOptions<T>): Promise<T> {
+    return (await this.getRepository().findOne(
+      options as FindOneOptions<BaseEntity>,
+    )) as unknown as Promise<T>;
+  }
+
+  public async findOneById(
+    id:
+      | {
+          id?: number;
+        }
+      | {
+          uuid?: string;
+        },
+  ): Promise<T> {
+    const options: FindOptionsWhere<T> = id as FindOptionsWhere<T>;
     return (await this.getRepository().findOneBy(
       options as FindOptionsWhere<BaseEntity>,
     )) as unknown as Promise<T>;
@@ -75,8 +87,16 @@ export abstract class CrudService<T extends BaseEntity> {
     )) as unknown as Promise<T[]>;
   }
 
-  public async remove(data: T): Promise<T> {
-    return (await this.getRepository().remove(data)) as unknown as Promise<T>;
+  public async remove(data: T | FindOneOptions<T>): Promise<T> {
+    let d: T;
+
+    if (data instanceof BaseEntity) {
+      d = data;
+    } else {
+      d = await this.findOne(data);
+    }
+
+    return (await this.getRepository().remove(d)) as unknown as Promise<T>;
   }
 
   public async preload(entityLike: DeepPartial<T>): Promise<T> {
