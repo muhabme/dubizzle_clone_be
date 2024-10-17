@@ -18,7 +18,7 @@ export class AdminService {
   }
 
   async blockUser(userId: number): Promise<User> {
-    const user = await this.usersService.findOneById({ id: userId });
+    const user = await this.usersService.first({ id: userId });
     if (!user) {
       throw new Error('User not found');
     }

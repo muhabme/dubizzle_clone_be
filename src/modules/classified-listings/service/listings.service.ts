@@ -1,5 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Media } from 'src/entities/media-center/media.entity';
+import {
+  dateRangeFilter,
+  exactFilter,
+  partialFilter,
+  searchFilter,
+} from 'src/lib/query-builder/filters';
+import { ItemQueryBuilder } from 'src/lib/query-builder/item-query-builder';
+import { ListQueryBuilder } from 'src/lib/query-builder/list-query-builder';
 import { CrudService } from 'src/lib/services/crud.service';
 import { CategoriesService } from 'src/modules/categories/services/categories.service';
 import { AttachmentsService } from 'src/modules/media-center/services/attachments.service';
@@ -16,20 +24,46 @@ export class ListingsService extends CrudService<Listing> {
     private readonly usersService: UsersService,
     private readonly attachmentsService: AttachmentsService,
   ) {
-    super(Listing);
+    const listQueryBuilder: ListQueryBuilder<Listing> = new ListQueryBuilder();
+    const itemQueryBuilder: ItemQueryBuilder<Listing> = new ItemQueryBuilder();
+
+    super({
+      defaults: {
+        findOptions: {
+          order: { updated_at: 'desc' },
+          relations: ['category', 'images', 'owner'],
+        },
+      },
+      entity: Listing,
+      listQueryBuilder: listQueryBuilder.setOptions({
+        allowedSorts: ['created_at', 'updated_at'],
+        allowedFilters: [
+          partialFilter('title'),
+          exactFilter('category'),
+          searchFilter(['title']),
+          dateRangeFilter('created_at'),
+        ],
+        allowedIncludes: [],
+        allowedIncludeCounts: [],
+      }),
+      itemQueryBuilder: itemQueryBuilder.setOptions({
+        allowedIncludes: [],
+        allowedIncludeCounts: [],
+      }),
+    });
   }
 
   async createListing(createListingDto: CreateListingDto): Promise<Listing> {
     const { categoryId, ownerId, ...listingData } = createListingDto;
 
-    const category = await this.categoriesService.findOneById({
+    const category = await this.categoriesService.first({
       id: categoryId,
     });
     if (!category) {
       throw new NotFoundException(`Category with ID ${categoryId} not found`);
     }
 
-    const owner = await this.usersService.findOneById({ id: ownerId });
+    const owner = await this.usersService.first({ id: ownerId });
     if (!owner) {
       throw new NotFoundException(`User with ID ${ownerId} not found`);
     }
@@ -57,12 +91,6 @@ export class ListingsService extends CrudService<Listing> {
     return listing;
   }
 
-  async findAllListings(): Promise<Listing[]> {
-    return await this.findAll({
-      relations: ['category', 'owner', 'promotion'],
-    });
-  }
-
   async findOneListing(id: number): Promise<Listing | undefined> {
     return await this.findOne({
       where: { id },
@@ -71,7 +99,7 @@ export class ListingsService extends CrudService<Listing> {
   }
 
   async deleteListing(id: number): Promise<void> {
-    const listing = await this.findOneById({ id });
+    const listing = await this.first({ id });
 
     if (!listing) {
       throw new NotFoundException(`Listing with ID ${id} not found`);

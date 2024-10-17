@@ -37,7 +37,7 @@ export class ReviewsService extends CrudService<Review> {
   }
 
   async deleteReview(reviewId: number): Promise<void> {
-    const review = await this.findOneById({ id: reviewId });
+    const review = await this.first({ id: reviewId });
     if (!review) {
       throw new NotFoundException('Review not found');
     }
