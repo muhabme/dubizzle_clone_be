@@ -1,10 +1,11 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from 'src/entities/users/user.entity';
+import { UserType } from 'src/modules/users/enums/user-type.enum';
 import { UsersService } from '../../users/services/users.service';
 import { LoginRequestDto } from '../requests/login-request.dto';
 import { AccessTokenService } from './access-token.service';
@@ -16,8 +17,8 @@ export class LoginService {
     private accessTokenService: AccessTokenService,
   ) {}
 
-  async attemptLogin(body: LoginRequestDto) {
-    const user = await this.findUser(body);
+  async attemptLogin(body: LoginRequestDto, userType: UserType) {
+    const user = await this.findUser(body, userType);
 
     await this.validatePassword(user, body);
 
@@ -26,15 +27,15 @@ export class LoginService {
     return { user, token };
   }
 
-  protected async findUser({ username }: LoginRequestDto) {
+  protected async findUser({ username }: LoginRequestDto, userType: UserType) {
     let user: User;
     if (this.isEmail(username)) {
       user = await this.usersService.findByCondition({
-        where: { email: username },
+        where: { email: username, type: userType },
       });
     } else if (this.isMobile(username)) {
       user = await this.usersService.findByCondition({
-        where: { mobile: username },
+        where: { mobile: username, type: userType },
       });
     } else {
       throw new BadRequestException(
@@ -43,7 +44,7 @@ export class LoginService {
     }
 
     if (!user) {
-      throw new ConflictException("User doesn't expect");
+      throw new NotFoundException("User doesn't exist");
     }
 
     return user;

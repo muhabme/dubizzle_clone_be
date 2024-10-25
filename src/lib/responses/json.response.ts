@@ -1,5 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
+import { BaseEntity } from 'typeorm';
 import { BaseModel } from '../entities/base.entity';
+import { ModelCollection } from '../utils/model-collection.entity';
 import { BaseResponse } from './base.response';
 import {
   GObj,
@@ -14,21 +16,43 @@ export class JsonResponse<T extends BaseResponse> {
   }
 
   json(response?: ResponseSchema | BaseModel): ResponseSchema;
+  json(
+    response?: ModelCollection<BaseEntity> | ListResponse<T>,
+  ): ListResponse<T>;
   json(response?: ListResponse<T>): ListResponse<T>;
   json(response?: ItemResponse<T>): ItemResponse<T>;
 
   json(
-    response?: ResponseSchema | BaseModel | ItemResponse<T> | ListResponse<T>,
+    response?:
+      | ResponseSchema
+      | BaseModel
+      | ModelCollection<BaseEntity>
+      | ItemResponse<T>
+      | ListResponse<T>,
   ): ResponseSchema | ItemResponse<T> | ListResponse<T> {
-    const res: ResponseSchema | BaseModel | ItemResponse<T> | ListResponse<T> =
-      response ?? {
-        status: HttpStatus.OK,
-      };
+    const res = response ?? {
+      status: HttpStatus.OK,
+    };
 
-    const responseClass: ClassConstructor<T> =
+    // get class of the current instance
+    const responseClass: ClassConstructor<BaseResponse> =
       Object.getPrototypeOf(this).constructor;
 
-    // Handle list of items response
+    if (res instanceof ModelCollection) {
+      return {
+        message: this.responseMessage(),
+        status: HttpStatus.OK,
+        data: res.items.map((_i: GObj) => {
+          try {
+            return (_i as BaseModel).transform(responseClass);
+          } catch {
+            return _i;
+          }
+        }),
+        meta: res.meta,
+      };
+    }
+
     if (
       (res as ListResponse<T>).data &&
       Array.isArray((res as ListResponse<T>).data)
@@ -47,22 +71,14 @@ export class JsonResponse<T extends BaseResponse> {
       };
     }
 
-    // Handle single item response
     if (res instanceof BaseModel) {
       return {
         message: this.responseMessage(),
         status: HttpStatus.OK,
         data: res.transform(responseClass),
       };
-    } else if (res.data instanceof BaseModel) {
-      return {
-        message: this.responseMessage(),
-        status: HttpStatus.OK,
-        data: res.data.transform(responseClass),
-      };
     }
 
-    // General response handling
     res.data = res.data || {};
     res.message = res.message || this.responseMessage();
 

@@ -9,6 +9,8 @@ import { Message } from '../messaging/message.entity';
 import { Notification } from '../notification/notification.entity';
 import { Payment } from '../payments/payment.entity';
 import { Review } from '../reviews-ratings/review.entity';
+import { getEnumValues } from 'src/lib/utils/enums';
+import { UserType } from 'src/modules/users/enums/user-type.enum';
 
 @Entity({ name: 'users' })
 export class User extends BaseAuthenticatableModel {
@@ -18,7 +20,15 @@ export class User extends BaseAuthenticatableModel {
   @Column({ type: 'varchar', length: 255, nullable: true })
   name?: string;
 
-  @Column({ type: 'date' })
+  @Column({
+    type: 'enum',
+    enum: getEnumValues(UserType),
+    nullable: false,
+    default: UserType.USER,
+  })
+  type?: UserType;
+
+  @Column({ type: 'timestamp' })
   birth_date: Date;
 
   @Column({ type: 'boolean', default: false })

@@ -6,7 +6,7 @@ import { DeepPartial } from 'typeorm';
 @Injectable()
 export class UsersService extends CrudService<User> {
   constructor() {
-    super(User);
+    super({ entity: User });
   }
 
   public async findByEmail(email: string): Promise<User | undefined> {

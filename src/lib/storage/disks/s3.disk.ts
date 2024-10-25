@@ -49,13 +49,12 @@ export class S3DiskStorage implements DiskStorageContract {
       Fields: { 'content-type': options.mimeType as string },
     };
 
-    const { fields } = await createPresignedPost(
+    const { url, fields } = await createPresignedPost(
       this.client,
       preSignedUrlOptions,
     );
-    const preSignedUrl = this.formatS3Url(options.key);
 
-    return { url: preSignedUrl, fields };
+    return { url, fields };
   }
 
   async exists(key: string): Promise<false | IMetadata> {

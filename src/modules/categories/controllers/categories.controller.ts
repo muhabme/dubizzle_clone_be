@@ -1,4 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Query
+} from '@nestjs/common';
+import { ListResponse } from 'src/lib/responses/response.type';
 import { CategoryItemResponse } from '../responses/category-item.response';
 import { ListCategoriesResponse } from '../responses/list-categories.response';
 import { CategoriesService } from '../services/categories.service';
@@ -9,29 +15,30 @@ export class CategoriesController {
 
   @Get()
   async findAll() {
-    const categories = await this.categoriesService.findAll();
-    return new ListCategoriesResponse(categories).getJson();
+    const categories = await this.categoriesService.findWithRelations({
+      relations: ['parent', 'children'],
+    });
+
+    return new ListCategoriesResponse().json({
+      data: categories,
+    }) as ListResponse<ListCategoriesResponse>;
   }
 
-  @Post()
-  async createCategory(@Body() body: { name: string; description: string }) {
-    const category = await this.categoriesService.create(body);
-    return new CategoryItemResponse(category).getJson();
+  @Get(':id')
+  async findOne(@Query('id') id: string) {
+    const category = await this.categoriesService.first(
+      { uuid: id },
+      {
+        relations: ['parent', 'children'],
+      },
+    );
+
+    if (!category) {
+      throw new NotFoundException(`Category with id ${id} not found`);
+    }
+
+    return new CategoryItemResponse().json({
+      data: category.transform(CategoryItemResponse),
+    }) as ListResponse<CategoryItemResponse>;
   }
-
-  // @Patch(':id')
-  // async updateCategory(
-  //   @Param('id') id: string,
-  //   @Body() body: { name?: string; description?: string },
-  // ) {
-  //   const updatedCategory = await this.categoriesService.update(id, body);
-  //   return new CategoryItemResponse(updatedCategory).getJson();
-  // }
-
-  // @Delete(':id')
-  // async deleteCategory(@Param('id') id: string) {
-  //   await this.categoriesService.delete(id);
-  //   return { message: 'Category deleted successfully.' };
-  // }
-
 }

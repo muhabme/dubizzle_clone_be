@@ -7,7 +7,7 @@ import { SearchListingsDto } from '../dtos/search-listings.dto';
 @Injectable()
 export class SearchService extends CrudService<Listing> {
   constructor() {
-    super(Listing);
+    super({ entity: Listing });
   }
 
   async searchListings(

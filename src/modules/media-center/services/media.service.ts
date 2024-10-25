@@ -22,7 +22,7 @@ export class MediaService extends CrudService<Media> {
   private diskName: StorageDisk | undefined;
 
   constructor(private readonly diskStorageManager: DiskStorageManager) {
-    super(Media);
+    super({ entity: Media });
 
     this.diskMapper = {
       production: StorageDisk.S3,
@@ -84,7 +84,6 @@ export class MediaService extends CrudService<Media> {
         throw new HttpException('Invalid Media Type', HttpStatus.FORBIDDEN);
       }
     }
-
     return true;
   }
 
@@ -106,13 +105,13 @@ export class MediaService extends CrudService<Media> {
         await this.validate(item, disk);
       }
 
-      if (item.uploaded_at) {
-        continue;
-      }
-
       const newPath = await item.pathToFolder(destinationFolder);
 
-      await disk.move(item.path!, newPath, { contentType: item.mime_type });
+      await disk.move(item.path!, newPath, {
+        contentType: item.mime_type,
+        contentLength: item.size_in_bytes,
+        acl: 'public-read'
+      });
 
       item.path = newPath;
       item.model_id = relatedModel.id;

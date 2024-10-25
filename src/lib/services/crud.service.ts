@@ -58,14 +58,7 @@ export abstract class CrudService<T extends BaseEntity> {
 
   protected defaultAttributes?: DeepPartial<T>;
 
-  protected constructor(options: typeof BaseEntity | CurdServiceOptions<T>) {
-    if (options instanceof BaseEntity) {
-      this.entity = options as typeof BaseEntity;
-      return;
-    }
-
-    options = options as CurdServiceOptions<T>;
-
+  protected constructor(options: CurdServiceOptions<T>) {
     this.entity = options.entity;
     this.listQueryBuilder = options.listQueryBuilder;
     this.itemQueryBuilder = options.itemQueryBuilder;
@@ -335,7 +328,8 @@ export abstract class CrudService<T extends BaseEntity> {
   }
 
   protected getEntity() {
-    if (!this.entity) throw new Error('No entity found');
+    if (!this.entity)
+      throw new HttpException('Resource cannot be found', HttpStatus.NOT_FOUND);
 
     return this.entity as typeof BaseEntity & T & typeof FindOptions;
   }

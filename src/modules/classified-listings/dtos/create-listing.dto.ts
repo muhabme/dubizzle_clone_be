@@ -27,11 +27,5 @@ export class CreateListingDto {
   @IsArray()
   @ArrayMinSize(1)
   @IsMediaFile()
-  images: string;
-
-  @IsNumber()
-  categoryId: number;
-
-  @IsNumber()
-  ownerId: number;
+  images: string[];
 }

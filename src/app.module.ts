@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configModuleSetupOptions } from './config/config-module-options';
 import { typeOrmModuleOptions } from './config/typeorm-module-options';
+import { AdminModule } from './modules/admin/admin.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ListingsModule } from './modules/classified-listings/listings.module';
@@ -17,6 +18,7 @@ import { UsersModule } from './modules/users/users.module';
     ConfigModule.forRoot(configModuleSetupOptions),
     TypeOrmModule.forRootAsync(typeOrmModuleOptions),
     AuthModule,
+    AdminModule,
     UsersModule,
     CategoriesModule,
     ListingsModule,

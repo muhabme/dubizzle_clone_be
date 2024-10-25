@@ -1,17 +1,23 @@
 import { Expose } from 'class-transformer';
-import { BaseResponse } from 'src/lib/responses/base.response';
+import { Category } from 'src/entities/categories/category.entity';
+import { JsonResponse } from 'src/lib/responses/json.response';
 
-export class CategoryItemResponse<T extends BaseResponse> {
-  data: T;
+export class CategoryItemResponse extends JsonResponse<{}> {
+  @Expose({ name: 'uuid' })
+  id: string;
 
-  constructor(data: T) {
-    this.data = data;
-  }
+  @Expose({ name: 'name' })
+  name: string;
 
-  getJson() {
-    return this.data;
-  }
+  @Expose({ name: 'description' })
+  description: string;
 
-  @Expose({ name: 'some_property' })
-  someProperty: string;
+  @Expose({ name: 'isRootParent' })
+  isRootParent: boolean;
+
+  @Expose({ name: 'children' })
+  children: Category[];
+
+  @Expose({ name: 'parent' })
+  parent: Category;
 }

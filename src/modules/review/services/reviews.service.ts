@@ -7,7 +7,7 @@ import { CrudService } from '../../../lib/services/crud.service';
 @Injectable()
 export class ReviewsService extends CrudService<Review> {
   constructor() {
-    super(Review);
+    super({ entity: Review });
   }
 
   async createReview(data: {

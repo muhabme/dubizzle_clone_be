@@ -3,7 +3,7 @@ import { Category } from 'src/entities/categories/category.entity';
 import { User } from 'src/entities/users/user.entity';
 import { CategoriesService } from 'src/modules/categories/services/categories.service';
 import { UsersService } from 'src/modules/users/services/users.service';
-import { ListingsService } from '../../classified-listings/service/listings.service';
+import { ListingsService } from '../../../classified-listings/service/listings.service';
 
 @Injectable()
 export class AdminService {

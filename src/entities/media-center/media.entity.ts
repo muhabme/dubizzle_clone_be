@@ -61,7 +61,11 @@ export class Media extends BaseModel {
   @Column({ type: 'bigint', nullable: true })
   order_column: number;
 
-  @Column({ type: 'datetime', nullable: false })
+  @Column({
+    type: 'datetime',
+    nullable: false,
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   uploaded_at?: Date;
 
   url: string;

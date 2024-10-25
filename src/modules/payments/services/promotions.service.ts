@@ -12,7 +12,7 @@ export class PromotionsService extends CrudService<Promotion> {
     @InjectRepository(Listing)
     private readonly listingsService: ListingsService,
   ) {
-    super(Promotion);
+    super({ entity: Promotion });
   }
 
   async promoteListing(

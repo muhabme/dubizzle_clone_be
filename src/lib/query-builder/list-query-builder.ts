@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { isEmpty, toNumber, snakeCase } from 'lodash';
+import { isEmpty, snakeCase, toNumber } from 'lodash';
 import type {
   BaseEntity,
   FindOptionsOrder,
@@ -7,11 +7,11 @@ import type {
   FindOptionsWhere,
 } from 'typeorm';
 
+import { FindManyOptions } from 'src/typeorm/contracts/find-many-options';
 import { stringAfter } from '../helpers/string';
 import { QueryBuilderFiltersParser } from './parsers/query-builder-filters.parser';
 import { QueryBuilder } from './query-builder';
 import type { ListQueryParams } from './requests/list-query.params';
-import { FindManyOptions } from 'src/typeorm/contracts/find-many-options';
 
 @Injectable()
 export class ListQueryBuilder<T extends BaseEntity> extends QueryBuilder<T> {
@@ -79,7 +79,6 @@ export class ListQueryBuilder<T extends BaseEntity> extends QueryBuilder<T> {
     const direction: FindOptionsOrderValue = this.params.sort.startsWith('-')
       ? 'DESC'
       : 'ASC';
-
     if (!this.options?.allowedSorts?.includes(column)) {
       throw new HttpException(
         'Invalid Sort Query',

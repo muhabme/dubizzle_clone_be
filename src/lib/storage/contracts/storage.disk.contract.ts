@@ -16,6 +16,7 @@ export interface PreSignedUrlOptions {
 export interface IMetadata {
   contentType?: string;
   contentLength?: number;
+  acl?: string;
 }
 
 export interface DiskStorageContract {

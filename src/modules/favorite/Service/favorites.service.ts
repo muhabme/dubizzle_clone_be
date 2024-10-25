@@ -7,7 +7,7 @@ import { CrudService } from 'src/lib/services/crud.service';
 @Injectable()
 export class FavoritesService extends CrudService<Favorite> {
   constructor() {
-    super(Favorite);
+    super({ entity: Favorite });
   }
 
   async addToFavorites(user: User, listing: Listing): Promise<Favorite> {

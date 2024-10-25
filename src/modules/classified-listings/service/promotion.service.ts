@@ -7,7 +7,7 @@ import { ListingsService } from './listings.service';
 @Injectable()
 export class PromotionService extends CrudService<Promotion> {
   constructor(private readonly listingsService: ListingsService) {
-    super(Promotion);
+    super({ entity: Promotion });
   }
 
   async promoteListing(

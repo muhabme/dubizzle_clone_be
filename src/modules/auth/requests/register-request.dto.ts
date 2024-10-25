@@ -1,5 +1,11 @@
-import { Type } from 'class-transformer';
-import { IsDate, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import {
+  IsDate,
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
 
 export class RegisterRequestDto {
   @IsNotEmpty()
@@ -10,8 +16,7 @@ export class RegisterRequestDto {
   @IsNotEmpty()
   full_name: string;
 
-  @Type(() => Date)
-  @IsDate()
+  @IsDateString()
   birth_date: Date;
 
   // @IsString()

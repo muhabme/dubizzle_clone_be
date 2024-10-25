@@ -26,3 +26,8 @@ export interface ListResponse<T extends BaseResponse> extends ResponseSchema {
   data: T[];
   meta: ResponseMeta;
 }
+
+export interface ErrorResponse extends ResponseSchema {
+  exception: string;
+  errors?: GObj[] | null;
+}
